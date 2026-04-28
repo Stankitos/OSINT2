@@ -1,0 +1,2 @@
+# Instalações necessárias para o backend em Python
+requests==2.31.0

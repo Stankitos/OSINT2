@@ -1,0 +1,39 @@
+name: Atualizar Relatório OSINT
+
+on:
+  schedule:
+    # Roda todo dia às 03:00 UTC
+    - cron: '0 3 * * *'
+  workflow_dispatch:
+    # Permite rodar manualmente pelo GitHub
+
+jobs:
+  run-osint-script:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+
+      - name: Configurar Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Instalar Dependências
+        run: pip install -r requirements.txt
+
+      - name: Executar Crawler OSINT
+        env:
+          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+          GOOGLE_CSE_ID: ${{ secrets.GOOGLE_CSE_ID }}
+          HIBP_API_KEY: ${{ secrets.HIBP_API_KEY }}
+        run: python osint_backend.py
+
+      - name: Commit e Push dos Dados
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add data/
+          git commit -m "Auto-update: Relatórios OSINT" || exit 0
+          git push

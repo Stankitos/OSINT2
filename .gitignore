@@ -1,0 +1,15 @@
+# Ambientes virtuais
+venv/
+.env
+
+# Diretórios de build/cache
+__pycache__/
+*.pyc
+
+# IDEs
+.vscode/
+.idea/
+
+# Dados gerados localmente (não subir arquivos sensíveis caso existam)
+data/*.json
+!data/.keep
